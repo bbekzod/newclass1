@@ -1,11 +1,4 @@
-resource "aws_instance" "web" {
-  ami           = "ami-06e46074ae430fba6" # us-east-1
-  instance_type = "t3.micro"
-  associate_public_ip_address = true
-  availability_zone = "us-east-1a"
-  key_name = aws_key_pair.class2.key_name
 
-}
 
 resource "aws_key_pair" "class2" {
     key_name = "class2"
@@ -45,3 +38,33 @@ ingress {
     Name = "allow_tls"
   }
 }
+
+
+
+resource "aws_ebs_volume" "class2" {
+    availability_zone = "us-east-1a"
+    size = 40
+}
+ 
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdb"
+  volume_id   = aws_ebs_volume.class2.id
+  instance_id = aws_instance.web.id
+}
+
+
+
+
+resource "aws_instance" "web" {
+  ami           = "ami-06e46074ae430fba6" # us-east-1
+  instance_type = "t3.micro"
+  associate_public_ip_address = true
+  availability_zone = "us-east-1a"
+  key_name = aws_key_pair.class2.key_name
+  vpc_security_group_ids = [
+    aws_security_group.class2.id,
+    ]
+}
+
+
+
