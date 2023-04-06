@@ -41,6 +41,7 @@ resource "aws_security_group" "class2" {
 
 
 
+
 resource "aws_ebs_volume" "class2" {
   availability_zone = "us-east-1a"
   size              = 40
@@ -66,17 +67,40 @@ resource "aws_instance" "web" {
   ]
 }
 
-
-resource "aws_route53_record" "class2" {
-  allow_overwrite = true
-  zone_id         = var.zone_id
-  name            = "blog.${var.domain}"
-  type            = "A"
-  ttl             = 300
-  records         = [aws_instance.web.public_ip]
+resource "aws_instance" "web2" {
+  ami                         = "ami-06e46074ae430fba6" # us-east-1
+  instance_type               = "t3.micro"
+  associate_public_ip_address = true
+  availability_zone           = "us-east-1a"
+  key_name                    = aws_key_pair.class2.key_name
+  vpc_security_group_ids = [
+    aws_security_group.class2.id,
+  ]
 }
 
-variable "zone_id" {}
-variable "domain" {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# resource "aws_route53_record" "class2" {
+#   allow_overwrite = true
+#   zone_id         = var.zone_id
+#   name            = "blog.${var.domain}"
+#   type            = "A"
+#   ttl             = 300
+#   records         = [aws_instance.web.public_ip]
+# }
+
+# variable "zone_id" {}
+# variable "domain" {}
 
 
