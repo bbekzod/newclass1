@@ -1,13 +1,13 @@
-variable tags {
-    type = map
-    default = {
-        Name = "Demo"
-        Team = "Devops"
-        Quarter = 2
-    }
+variable "tags" {
+  type = map(any)
+
 }
 
-variable region {
-    
-    default = "us-east-2"
-}
+variable "region" {}
+
+variable "key_name1" {}
+
+variable "key_name2" {}
+
+
+variable "public_key" {}
