@@ -6,15 +6,14 @@ do:
 
 
 build-ireland:
-	terraform apply -var-file envs/regions/eu-west-1/ireland.tfvars  -auto-approve
+	terraform workspace new ireland 	|| terraform workspace select ireland  && terraform init &&    		terraform  apply   -var-file envs/regions/eu-west-1/ireland.tfvars --auto-approve
 
 destroy-ireland:
-	terraform destroy -var-file envs/regions/eu-west-1/ireland.tfvars  -auto-approve
+	terraform workspace new ireland 	|| terraform workspace select ireland  && terraform init &&  		terraform  destroy   -var-file envs/regions/eu-west-1/ireland.tfvars --auto-approve
 
 all:
-	terraform apply -var-file envs/regions/us-east-2/ohio.tfvars  -auto-approve
-	terraform apply -var-file envs/regions/eu-west-1/ireland.tfvars  -auto-approve
+	make bo && make build-ireland
 
-dall:
-	terraform destroy -var-file envs/regions/us-east-2/ohio.tfvars  -auto-approve
-	terraform destroy -var-file envs/regions/eu-west-1/ireland.tfvars  -auto-approve
+
+destroy-all:
+	make do && make destroy-ireland 
